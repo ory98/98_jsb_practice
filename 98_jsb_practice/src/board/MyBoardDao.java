@@ -15,7 +15,9 @@ public class MyBoardDao {
 	 	3. 게시글을 추가하는 DAO
 	 	4. 전체 게시글을 조회하는 DAO
 	 	5. 하나의 게시글을 조회하는 DAO (조회수 올려주는  + 조회하는 )
-	 	
+	 	6. 비밀번호를 인증하는 DAO
+	 	7. 게시글을 수정하는 DAO
+	 	8. 게시글을 삭제하는 DAO
 	*/
 	
 	// 1.  객체 만들어주기 (싱글턴 패턴)
@@ -99,7 +101,121 @@ public class MyBoardDao {
 		return myBoardList;
 	}
 	
-	// 5. 하나의 게시글을 조회하는 DAO (조회수 올려주는  + 조회하는 )
+	// 5. 하나의 게시글을 조회하는 DAO (조회수 올려주는  + 조회하는)
+	public MyBoardDto myGetOneBoard(int num) {
+		
+		MyBoardDto myBoardDto = new MyBoardDto();
+		
+		try {
+			conn  = getConnection();
+			
+			pstmt = conn.prepareStatement("UPDATE BOARD SET READ_COUNT = READ_COUNT + 1 WHERE NUM = ?");
+			pstmt.setInt(1, num);
+			pstmt.executeUpdate();
+			
+			pstmt = conn.prepareStatement("SELECT * FROM BOARD WHERE NUM = ?");
+			pstmt.setInt(1, num);
+			rs = pstmt.executeQuery();
+			
+			if (rs.next()) {
+				myBoardDto.setNum(rs.getInt("NUM"));
+				myBoardDto.setWriter(rs.getString("WRITER"));
+				myBoardDto.setEmail(rs.getString("EMAIL"));
+				myBoardDto.setSubject(rs.getString("SUBJECT"));
+				myBoardDto.setPassword(rs.getString("PASSWORD"));
+				myBoardDto.setRegDate(rs.getDate("REG_DATE"));
+				myBoardDto.setReadCount(rs.getInt("READ_COUNT"));
+				myBoardDto.setContent(rs.getString("CONTENT"));	
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {rs.close();} catch (SQLException e) {e.printStackTrace();}
+			try {pstmt.close();} catch (SQLException e) {e.printStackTrace();}
+			try {conn.close();}  catch (SQLException e) {e.printStackTrace();}
+		}
+
+		return myBoardDto; 
+	}
+	
+	// 6. 비밀번호를 인증하는 DAO
+	public boolean myVaildMemberCheck(MyBoardDto myBoardDto) {
+		
+		boolean myIsVaildMember = false;
+		
+		try {
+			conn  = getConnection();
+			
+			pstmt = conn.prepareStatement("SELECT * FROM BOARD WHERE NUM = ? AND PASSWORD = ?");
+			pstmt.setInt(1, myBoardDto.getNum());
+			pstmt.setString(2, myBoardDto.getPassword());
+			rs = pstmt.executeQuery();
+			
+			if (rs.next()) {
+				myIsVaildMember = true;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (rs != null) try {rs.close();} catch (SQLException e) {e.printStackTrace();}
+			if (pstmt != null) try {pstmt.close();} catch (SQLException e) {e.printStackTrace();}
+			if (conn != null) try {conn.close();}  catch (SQLException e) {e.printStackTrace();}
+		}
+		
+		return myIsVaildMember;
+	}
+	
+	// 7. 게시글을 수정하는 DAO
+	public boolean myUpdateBoard(MyBoardDto myBoardDto) {
+		
+		boolean myIsUpdate = false;
+		
+		try {
+			
+			if(myVaildMemberCheck(myBoardDto)) {
+				conn  = getConnection();
+				pstmt = conn.prepareStatement("UPDATE BOARD SET SUBJECT = ? , CONTENT = ? WHERE NUM = ?");
+				pstmt.setString(1, myBoardDto.getSubject());
+				pstmt.setString(2, myBoardDto.getContent());
+				pstmt.setInt(3, myBoardDto.getNum());
+				pstmt.executeUpdate();
+				myIsUpdate = true;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (pstmt != null) try {pstmt.close();} catch (SQLException e) {e.printStackTrace();}
+			if (conn != null) try {conn.close();}  catch (SQLException e) {e.printStackTrace();}
+		}
+	
+		return myIsUpdate;
+	}
+	
+	// 8. 게시글을 삭제하는 DAO
+	public boolean myDeleteBoard(MyBoardDto myBoardDto) {
+		
+		boolean isDelete = false;
+		
+		try {
+			
+			if (myVaildMemberCheck(myBoardDto)) {
+				conn  = getConnection();
+				pstmt = conn.prepareStatement("DELETE FROM BOARD WHERE NUM = ?");
+				pstmt.setInt(1, myBoardDto.getNum());
+				pstmt.executeQuery();
+				isDelete = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (pstmt != null) try {pstmt.close();} catch (SQLException e) {e.printStackTrace();}
+			if (conn != null) try {conn.close();}  catch (SQLException e) {e.printStackTrace();}
+		}
+		return isDelete;
+	}
 
 	
 	
