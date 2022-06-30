@@ -21,7 +21,7 @@
 	
 	<script>
 		alert("등록되었습니다.");
-		location.href = "bLIst.jsp";
+		location.href = "bList.jsp";
 	</script>
 </body>
 </html>

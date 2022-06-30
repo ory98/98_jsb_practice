@@ -35,8 +35,10 @@ public class MyBoardDao {
 	public Connection getConnection() {
 		
 		try {
+			
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/step3_board_ex?serverTimezone=UTC" , "root" , "1234"); 
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/step3_board_ex?serverTimezone=UTC" , "root" , "8360");
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 
@@ -48,7 +50,7 @@ public class MyBoardDao {
 		
 		try {
 			conn = getConnection();
-			String sql = "INSERT INTO BOARD(WIRTER, EMAIL, SUBJECT, PASSWORD, REG_DATE, READ_COUNT, CONTNET)";
+			String sql = "INSERT INTO BOARD(WRITER, EMAIL, SUBJECT, PASSWORD, REG_DATE, READ_COUNT, CONTENT)";
 				   sql += "VALUES(?,?,?,?,NOW(),0,?)";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, myBoardDto.getWriter());
