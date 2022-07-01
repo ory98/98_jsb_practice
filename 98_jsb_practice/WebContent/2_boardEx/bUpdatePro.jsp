@@ -22,6 +22,7 @@
 	%>		
 			<script>
 				alert("수정되었습니다.");
+				location.href="bList.jsp";
 			</script>
 	<%		
 		}
@@ -29,7 +30,7 @@
 	%>	
 			<script>
 				alert("패스워드가 일치하지 않습니다. 확인해주세요.");
-				histort.go(-1);
+				history.go(-1);
 			</script>
 			
 	<%		

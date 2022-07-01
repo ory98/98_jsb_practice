@@ -10,7 +10,7 @@
 <body>
 
 	<%
-		int num = Integer.parseInt("num");
+		int num = Integer.parseInt(request.getParameter("num"));
 		MyBoardDto myBoardDto = MyBoardDao.getInstance().myGetOneBoard(num);
 	%>
 	

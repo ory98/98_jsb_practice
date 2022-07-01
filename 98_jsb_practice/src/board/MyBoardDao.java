@@ -207,7 +207,7 @@ public class MyBoardDao {
 				conn  = getConnection();
 				pstmt = conn.prepareStatement("DELETE FROM BOARD WHERE NUM = ?");
 				pstmt.setInt(1, myBoardDto.getNum());
-				pstmt.executeQuery();
+				pstmt.executeUpdate();
 				isDelete = true;
 			}
 		} catch (Exception e) {
