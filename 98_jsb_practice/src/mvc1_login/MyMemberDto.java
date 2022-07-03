@@ -1,4 +1,4 @@
-package login;
+package mvc1_login;
 
 import java.sql.Date;
 

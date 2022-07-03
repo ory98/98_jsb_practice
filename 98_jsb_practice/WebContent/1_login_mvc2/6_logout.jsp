@@ -3,9 +3,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>delete</title>
+<title>logout</title>
 </head>
 <body>
-
+	<script>
+		alert("로그아웃 되었습니다.");
+		location.href = "main";
+	</script>
 </body>
 </html>
