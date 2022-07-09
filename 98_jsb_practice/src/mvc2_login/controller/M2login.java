@@ -8,7 +8,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import mvc2_loginDao.M2memberDao;
 import mvc2_loginDto.M2memberDto;
 
 @WebServlet("/m2login")
@@ -29,6 +31,13 @@ public class M2login extends HttpServlet {
 		m2memberDto.setId(request.getParameter("id"));
 		m2memberDto.setPw(request.getParameter("pw"));
 		
+		boolean isLogin = M2memberDao.getInstance().login(m2memberDto);
+		
+		if (isLogin == true) {
+			
+			HttpSession session = request.getSession();
+			session.setAttribute("id", m2memberDto.getId());
+		}
 		
 		RequestDispatcher dis = request.getRequestDispatcher("1_mvc2_loginEx/5_loginAction.jsp");
 		dis.forward(request, response);
