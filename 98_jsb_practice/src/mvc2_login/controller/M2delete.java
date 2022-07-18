@@ -14,17 +14,18 @@ import mvc2_loginDao.M2memberDao;
 
 @WebServlet("/m2delete")
 public class M2delete extends HttpServlet {
-	
+
 	private static final long serialVersionUID = 1L;
-   
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 		HttpSession session = request.getSession();
-		
-		M2memberDao.getInstance().deleteMember((String)session.getAttribute("id"));
-		
+
+		M2memberDao.getInstance().deleteMember((String) session.getAttribute("id"));
+
 		session.invalidate();
-		
+
 		RequestDispatcher dis = request.getRequestDispatcher("1_mvc2_loginEx/9_delete.jsp");
 		dis.forward(request, response);
 	}

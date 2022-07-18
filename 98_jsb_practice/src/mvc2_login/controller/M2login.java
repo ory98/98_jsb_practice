@@ -15,30 +15,32 @@ import mvc2_loginDto.M2memberDto;
 
 @WebServlet("/m2login")
 public class M2login extends HttpServlet {
-	
+
 	private static final long serialVersionUID = 1L;
- 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 		RequestDispatcher dis = request.getRequestDispatcher("1_mvc2_loginEx/4_login.jsp");
 		dis.forward(request, response);
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
 		M2memberDto m2memberDto = new M2memberDto();
-		
+
 		m2memberDto.setId(request.getParameter("id"));
 		m2memberDto.setPw(request.getParameter("pw"));
-		
+
 		boolean isLogin = M2memberDao.getInstance().login(m2memberDto);
-		
+
 		if (isLogin == true) {
-			
+
 			HttpSession session = request.getSession();
 			session.setAttribute("id", m2memberDto.getId());
 		}
-		
+
 		RequestDispatcher dis = request.getRequestDispatcher("1_mvc2_loginEx/5_loginAction.jsp");
 		dis.forward(request, response);
 	}
